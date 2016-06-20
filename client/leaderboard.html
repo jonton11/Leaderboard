@@ -1,0 +1,19 @@
+<head>
+  <title>Leaderboard</title>
+</head>
+<body>
+  <h1>Leaderboard</h1>
+  <!-- {{> }} is like <%= yield %> -->
+  {{> leaderboard}}
+</body>
+
+<template name="leaderboard">
+  <ul id="playerList">
+    {{#each player}}
+      <li class="player {{selectedClass}}"> {{name}} : {{score}} </li>
+    {{/each}}
+  </ul>
+  <p> Total Number of Players: {{listPlayerCount}} </p>
+  <input type="button" class="increment" value="Give 5 Points" />
+  <input type="button" class="decrement" value="Take 5 Points" />
+</template>
