@@ -1,4 +1,7 @@
+PlayersList = new Mongo.Collection('players');
+
 if (Meteor.isClient) {
+  Meteor.subscribe('thePlayers');
   Template.leaderboard.helpers({
     'player': function() {
       return PlayersList.find({}, {sort: {score: -1, name: 1}});
@@ -7,7 +10,8 @@ if (Meteor.isClient) {
       // Sort by - => ASC to DESC
     },
     'listPlayerCount': function() {
-      return PlayersList.find().count();
+      var currentUserId = Meteor.userId();
+      return PlayersList.find({createdBy: currentUserId}).count();
     },
     'selectedClass': function() {
       var playerId = this._id;
@@ -36,19 +40,25 @@ if (Meteor.isClient) {
     'click .decrement': function() {
       var selectedPlayer = Session.get('selectedPlayer');
       PlayersList.update(selectedPlayer, {$inc: {score: -5}});
-    },
+    }
+  });
+
+  Template.addPlayerForm.events({
     'submit form': function(event, template) {
       event.preventDefault();
       var playerNameVar = event.target.playerName.value;
       var playerScoreVar = parseInt(event.target.playerScore.value);
+      var currentUserId = Meteor.userId();
       PlayersList.insert({
         name: playerNameVar,
-        score: playerScoreVar || 0
+        score: playerScoreVar || 0,
+        createdBy: currentUserId
       })
       event.target.playerName.value = "";
       event.target.playerScore.value = "";
-
-    },
+    }
+  });
+  Template.removePlayerForm.events({
     'click .remove': function() {
       var selectedPlayer = Session.get('selectedPlayer');
       if (confirm("Do you really want to remove " + PlayersList.findOne(selectedPlayer).name + "?")) { PlayersList.remove(selectedPlayer); }
@@ -56,9 +66,15 @@ if (Meteor.isClient) {
   });
 }
 
-if (Meteor.isServer) { }
+if (Meteor.isServer) {
+  Meteor.publish('thePlayers', function() {
+    var currentUserId = this.userId;
+    return PlayersList.find({createdBy: currentUserId});
+  });
+}
 
-PlayersList = new Mongo.Collection('players');
+
+// UserAccounts = new Mongo.Collection('users');
 // We can name collection (table) in MongoDB whatever we want but it must be unique
 
 // We pass data to the collection with the insert(); method in JSON format

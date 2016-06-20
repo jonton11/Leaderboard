@@ -2,6 +2,7 @@
   <title>Leaderboard</title>
 </head>
 <body>
+  {{> loginButtons}}
   <h1>Leaderboard</h1>
   <!-- {{> }} is like <%= yield %> -->
   {{> leaderboard}}
@@ -20,8 +21,12 @@
     <li> Total Number of Players: {{listPlayerCount}} </li>
     <li> Average Score: {{averageScore.score}} </li>
   </ul>
-  {{> addPlayerForm}}
-  {{> removePlayerForm}}
+  {{#if currentUser}}
+    {{> addPlayerForm}}
+    {{> removePlayerForm}}
+  {{/if}}
+  <br />
+
 </template>
 
 <template name="addPlayerForm">
