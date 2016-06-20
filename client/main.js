@@ -15,6 +15,13 @@ if (Meteor.isClient) {
       if (playerId == selectedPlayer) {
         return "selected";
       }
+    },
+    'showSelectedPlayer': function() {
+      var selectedPlayer = Session.get('selectedPlayer');
+      return PlayersList.findOne(selectedPlayer);
+    },
+    'averageScore': function() {
+      return PlayersList.find({}, {$avg: {score: 1}});
     }
   });
   Template.leaderboard.events({
@@ -29,6 +36,22 @@ if (Meteor.isClient) {
     'click .decrement': function() {
       var selectedPlayer = Session.get('selectedPlayer');
       PlayersList.update(selectedPlayer, {$inc: {score: -5}});
+    },
+    'submit form': function(event, template) {
+      event.preventDefault();
+      var playerNameVar = event.target.playerName.value;
+      var playerScoreVar = parseInt(event.target.playerScore.value);
+      PlayersList.insert({
+        name: playerNameVar,
+        score: playerScoreVar || 0
+      })
+      event.target.playerName.value = "";
+      event.target.playerScore.value = "";
+
+    },
+    'click .remove': function() {
+      var selectedPlayer = Session.get('selectedPlayer');
+      if (confirm("Do you really want to remove " + PlayersList.findOne(selectedPlayer).name + "?")) { PlayersList.remove(selectedPlayer); }
     }
   });
 }
