@@ -12,11 +12,11 @@ Meteor.publish('thePlayers', function() {
 });
 
 Meteor.methods({
-  'insertPlayerData': function(playerNameVar){
+  'insertPlayerData': function(playerNameVar, playerScoreVar) {
     var currentUserId = Meteor.userId();
     PlayersList.insert({
         name: playerNameVar,
-        score: 0,
+        score: playerScoreVar,
         createdBy: currentUserId
     });
   },

@@ -2,10 +2,13 @@
   <title>Leaderboard</title>
 </head>
 <body>
-  {{> loginButtons}}
-  <h1>Leaderboard</h1>
-  <!-- {{> }} is like <%= yield %> -->
-  {{> leaderboard}}
+  <div class="container">
+    {{> loginButtons}}
+    <h1>Leaderboard</h1>
+    <hr />
+    <!-- {{> }} is like <%= yield %> -->
+    {{> leaderboard}}
+  </div>
 </body>
 
 <template name="leaderboard">
@@ -13,13 +16,14 @@
     {{#each player}}
       <li class="player {{selectedClass}}"> {{name}} : {{score}} </li>
     {{/each}}
-    <input type="button" class="increment" value="Give 5 Points" />
-    <input type="button" class="decrement" value="Take 5 Points" />
+    <br />
+    <input type="button" class="increment btn btn-success" value="Give 5 Points" />
+    <input type="button" class="decrement btn btn-danger" value="Take 5 Points" />
     {{#if showSelectedPlayer}}
       <li> Selected Player: {{showSelectedPlayer.name}} </li>
     {{/if}}
-    <li> Total Number of Players: {{listPlayerCount}} </li>
-    <li> Average Score: {{averageScore.score}} </li>
+    <li><h3> Total Number of Players: {{listPlayerCount}}</h3> </li>
+    <!-- <li> Average Score: {{averageScore.score}} </li> -->
   </ul>
   {{#if currentUser}}
     {{> addPlayerForm}}
@@ -31,12 +35,16 @@
 
 <template name="addPlayerForm">
   <form>
-    <input type="text" name="playerName" placeholder="Name"/>
-    <input type="text" name="playerScore" placeholder="Score"/>
-    <input type="submit" value="Add Player" />
+    <div class="container">
+      <input type="text" name="playerName" placeholder="Name"/>
+      <input type="text" name="playerScore" placeholder="Score"/>
+      <input type="submit" value="Add Player" class="btn btn-default" />
+    </div>
   </form>
 </template>
 
 <template name="removePlayerForm">
-  <input type="button" class="remove" value="Remove Player" />
+  <div class="container">
+    <input type="button" class="remove btn btn-info" value="Remove Player" />
+  </div>
 </template>

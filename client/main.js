@@ -50,7 +50,7 @@ Template.addPlayerForm.events({
     var playerScoreVar = parseInt(event.target.playerScore.value);
     event.target.playerName.value = "";
     event.target.playerScore.value = "";
-    Meteor.call('insertPlayerData', playerNameVar);
+    Meteor.call('insertPlayerData', playerNameVar, playerScoreVar);
   }
 });
 Template.removePlayerForm.events({
